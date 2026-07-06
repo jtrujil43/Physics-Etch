@@ -8,6 +8,11 @@ use Physics::Etch::Material;
 use Physics::Etch::Etchant;
 use Physics::Etch::WetEtch;
 use Physics::Etch::DryEtch;
+use Physics::Etch::GDSII;
+use Physics::Etch::Layout;
+use Physics::Etch::Chamber;
+use Physics::Etch::Loading;
+use Physics::Etch::Simulation;
 
 our $VERSION = '0.01';
 
@@ -263,6 +268,26 @@ sub _coerce_layer {
         :   Physics::Etch::Material->new( name => $spec );
     $mat->thickness($thickness) if defined $thickness;
     return $mat;
+}
+
+# ===========================================================================
+# Convenience constructors for the pattern / chamber / loading / simulation
+# tools (so a single `use Physics::Etch` exposes the whole toolkit).
+# ===========================================================================
+sub chamber    { shift; Physics::Etch::Chamber->new(@_) }
+sub loading     { shift; Physics::Etch::Loading->new(@_) }
+sub layout      { shift; Physics::Etch::Layout->new(@_) }
+sub read_gdsii  { shift; Physics::Etch::GDSII->read(@_) }
+sub new_gdsii   { shift; Physics::Etch::GDSII->new(@_) }
+
+sub layout_from_gds {
+    my ( $class, $file, %a ) = @_;
+    return Physics::Etch::Layout->from_gdsii_file( $file, %a );
+}
+
+sub simulate {
+    my ( $class, %a ) = @_;
+    return Physics::Etch::Simulation->new(%a);
 }
 
 1;
