@@ -165,6 +165,47 @@ print $sim->report;               # per-CD anisotropy, undercut, RIE lag
 prove -Ilib t/
 ```
 
+## Install locally
+
+With ExtUtils::MakeMaker:
+
+```sh
+perl Makefile.PL
+make
+make test
+make install
+```
+
+On Windows with Strawberry Perl, use `gmake` instead of `make` if needed.
+
+## Build and upload to CPAN
+
+1. Build a release archive:
+
+```sh
+perl Makefile.PL
+make dist
+```
+
+This creates `Physics-Etch-0.01.tar.gz`.
+
+If `make dist` fails because `gzip` is unavailable on Windows, create it with:
+
+```sh
+perl -MIO::Compress::Gzip=gzip -e "gzip 'Physics-Etch-0.01.tar' => 'Physics-Etch-0.01.tar.gz' or die $IO::Compress::Gzip::GzipError"
+```
+
+2. Upload the tarball to PAUSE:
+   - Log in at <https://pause.perl.org/>
+   - Use **Upload a file to CPAN**
+   - Upload `Physics-Etch-0.01.tar.gz`
+
+After indexing completes, install from CPAN with:
+
+```sh
+cpanm Physics::Etch
+```
+
 ## Extending
 
 Add a material to `%MATERIAL` and a recipe hash to `@RECIPE` in
